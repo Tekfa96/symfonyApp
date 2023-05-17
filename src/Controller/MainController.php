@@ -4,6 +4,10 @@ namespace App\Controller;
 
 use App\Entity\Car;
 use App\Form\CarType;
+use App\Entity\Driver;
+use App\Form\DriverType;
+use App\Entity\Reservation;
+use App\Form\ReservationType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
@@ -25,9 +29,9 @@ class MainController extends AbstractController
 /**
  * @Route("create", name="create") 
  * */
-#[Route('/create', name: 'create')]
+#[Route('/create_car', name: 'create')]
 
-public function create(Request $request,  PersistenceManagerRegistry $doctrine){
+public function createCar(Request $request,  PersistenceManagerRegistry $doctrine){
     $car=new Car();
     $form=$this->createForm(CarType::class,$car);
     $form->handleRequest($request);
@@ -35,10 +39,10 @@ public function create(Request $request,  PersistenceManagerRegistry $doctrine){
         $em=$doctrine->getManager();
         $em->persist($car);
         $em->flush();
-        $this->addFlash('notice','Submitted successfully !!!');
+        $this->addFlash('notice','Car created successfully !!!');
         return $this->redirectToRoute('app_main');
     }
-    return $this->render('main/create.html.twig',[
+    return $this->render('main/car.html.twig',[
         'form'=> $form->createView()
     ]);
 }
@@ -57,7 +61,7 @@ public function update(Request $request, $id, PersistenceManagerRegistry $doctri
         $em=$doctrine->getManager();
         $em->persist($car);
         $em->flush();
-        $this->addFlash('notice','Update successfully !!!');
+        $this->addFlash('notice','Updated successfully !!!');
         return $this->redirectToRoute('app_main');
     }
     return $this->render('main/update.html.twig',[
@@ -78,4 +82,48 @@ public function delete($id, PersistenceManagerRegistry $doctrine){
     $this->addFlash('notice','Deleted successfully !!!');
     return $this->redirectToRoute('app_main');    
 }
+
+
+//Driver creation
+
+#[Route('/create_driver', name: 'create_driver')]
+
+public function createDriver(Request $request,  PersistenceManagerRegistry $doctrine){
+    $driver=new Driver();
+    $form=$this->createForm(DriverType::class,$driver);
+    $form->handleRequest($request);
+    if($form->isSubmitted()&& $form->isValid()){
+        $em=$doctrine->getManager();
+        $em->persist($driver);
+        $em->flush();
+        $this->addFlash('notice','Driver created successfully !!!');
+        return $this->redirectToRoute('app_main');
+    }
+    return $this->render('main/driver.html.twig',[
+        'form'=> $form->createView()
+    ]);
+}
+
+
+#[Route('/create_reservation', name: 'create_reservation')]
+
+public function createReservation(Request $request,  PersistenceManagerRegistry $doctrine){
+    $reservation=new Reservation();
+    $form=$this->createForm(ReservationType::class,$reservation);
+    $form->handleRequest($request);
+    if($form->isSubmitted()&& $form->isValid()){
+        $em=$doctrine->getManager();
+        $em->persist($reservation);
+        $em->flush();
+        $this->addFlash('notice','Reservation created successfully !!!');
+        return $this->redirectToRoute('app_main');
+    }
+    return $this->render('main/reservation.html.twig',[
+        'form'=> $form->createView()
+    ]);
+}
+
+
+
+
 }

@@ -8,6 +8,18 @@
 {{message}}
 </div>
 {%endfor%}
+
+<a class="btn btn-primary mt-5" href="create_driver" role="button" >
+Create driver
+</a>
+<a class="btn btn-primary mt-5" href="create_car" role="button" >
+Create car
+</a>
+
+<a class="btn btn-primary mt-5" href="create_reservation" role="button" >
+Create reservation
+</a>
+
 <table class="table">
   <thead>
     <tr>
@@ -16,6 +28,8 @@
       <th scope="col">Marque</th>
       <th scope="col">Modele</th>
       <th scope="col">Année</th>
+      <th scope="col">kilometrage</th>
+      <th scope="col">Action</th>
     </tr>
   </thead>
   <tbody>
@@ -26,10 +40,11 @@
       <td>{{data.marque}}</td>
       <td>{{data.modele}}</td>
       <td>{{data.annee}}</td>
+      <td>{{data.kilometrage}}</td>
+
       <td>
       <a class="btn btn-warning" href="{{path('update',{'id': data.id }) }}">Update</a>
       <a class="btn btn-danger" href="{{path('delete',{'id': data.id }) }}">Delete</a>
-
       </td>
     </tr>
     {%endfor%}

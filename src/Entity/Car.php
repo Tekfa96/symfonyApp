@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\CarRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: CarRepository::class)]
@@ -24,6 +26,17 @@ class Car
 
     #[ORM\Column(length: 255)]
     private ?string $annee = null;
+
+    #[ORM\Column(length: 255)]
+    private ?string $kilometrage = null;
+
+    #[ORM\OneToMany(mappedBy: 'car', targetEntity: Driver::class)]
+    private Collection $driver;
+
+    public function __construct()
+    {
+        $this->driver = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -77,4 +90,53 @@ class Car
 
         return $this;
     }
+
+    public function getKilometrage(): ?string
+    {
+        return $this->kilometrage;
+    }
+
+    public function setKilometrage(string $kilometrage): self
+    {
+        $this->kilometrage = $kilometrage;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Driver>
+     */
+    public function getDriver(): Collection
+    {
+        return $this->driver;
+    }
+
+    public function addDriver(Driver $driver): self
+    {
+        if (!$this->driver->contains($driver)) {
+            $this->driver->add($driver);
+            $driver->setCar($this);
+        }
+
+        return $this;
+    }
+
+    public function removeDriver(Driver $driver): self
+    {
+        if ($this->driver->removeElement($driver)) {
+            // set the owning side to null (unless already changed)
+            if ($driver->getCar() === $this) {
+                $driver->setCar(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function __toString():string
+    {
+        return $this->getMarque();
+    }
+
+
 }
